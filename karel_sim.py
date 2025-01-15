@@ -15,71 +15,89 @@ class KarelWorld:
         self.robot_position = [0, 0]  # Start in the top-left corner
         self.robot_direction = 0  # Facing UP
 
+        # Create the figure and axes for the grid
+        self.fig, self.ax = plt.subplots(figsize=(6, 6))
+        self.ax.set_xlim(-0.5, self.grid_size - 0.5)
+        self.ax.set_ylim(-0.5, self.grid_size - 0.5)
+        self.ax.set_aspect('equal')
+
+        # Remove axis ticks and labels
+        self.ax.set_xticks([])
+        self.ax.set_yticks([])
+        self.ax.set_xticklabels([])
+        self.ax.set_yticklabels([])
+        
+        plt.gca().invert_yaxis()
+        
+
+        # Draw the grid
+        for x in range(self.grid_size):
+            for y in range(self.grid_size):
+                self.ax.add_patch(
+                    patches.Rectangle(
+                        (y - 0.5, x - 0.5), 1, 1, fill=False, edgecolor="black", linewidth=0.8
+                    )
+                )
+
+        self.robot_directions = ['^', '>', 'v', '<']
+        self.robot_text = None
+        self.item_texts = []
+
     def place_item(self, x, y):
         self.grid[x][y] = 1  # Place an item
+        self.item_texts.append(
+            self.ax.text(
+                y, x, 'O', ha='center', va='center', fontsize=16, color='green'
+            )
+        )
+
+    def update_display(self):
+        # Clear robot from previous position
+        if self.robot_text:
+            self.robot_text.remove()
+
+        # Draw robot at current position
+        x, y = self.robot_position
+        self.robot_text = self.ax.text(
+            y, x, self.robot_directions[self.robot_direction],
+            ha='center', va='center', fontsize=16, color='red'
+        )
+        self.fig.canvas.draw_idle()
+        plt.pause(0.01)
 
     def move(self):
         x, y = self.robot_position
-        print("moving")
         if DIRECTIONS[self.robot_direction] == "UP" and x > 0:
-            print("mov1")
             self.robot_position[0] -= 1
         elif DIRECTIONS[self.robot_direction] == "RIGHT" and y < self.grid_size - 1:
-            print("mov2")
-            
             self.robot_position[1] += 1
         elif DIRECTIONS[self.robot_direction] == "DOWN" and x < self.grid_size - 1:
-            print("mov3")
-            
             self.robot_position[0] += 1
         elif DIRECTIONS[self.robot_direction] == "LEFT" and y > 0:
-            print("mov3")
-            
             self.robot_position[1] -= 1
+        self.update_display()
 
     def turn_left(self):
-        print("turning, direction: ", self.robot_direction)
-        
         self.robot_direction = (self.robot_direction - 1) % 4
-        print("turning, direction: ", self.robot_direction)
-        
+        self.update_display()
 
     def pick_up(self):
         x, y = self.robot_position
         if self.grid[x][y] == 1:
             self.grid[x][y] = 0
             print("Picked up an item!")
+            # Remove the corresponding text
+            for item_text in self.item_texts:
+                if item_text.get_position() == (y, x):
+                    item_text.remove()
+                    self.item_texts.remove(item_text)
+                    break
         else:
             print("No item to pick up here.")
-
-    def display_world(self):
-        plt.clf()  # Clear the previous plot
-        fig, ax = plt.subplots(figsize=(6, 6))
-        ax.set_xlim(-0.5, self.grid_size - 0.5)
-        ax.set_ylim(-0.5, self.grid_size - 0.5)
-        
-        # Draw grid
-        for x in range(self.grid_size):
-            for y in range(self.grid_size):
-                rect = patches.Rectangle((y - 0.5, x - 0.5), 1, 1, linewidth=1, edgecolor='black', facecolor='white')
-                ax.add_patch(rect)
-                if self.grid[x][y] == 1:
-                    ax.text(y, x, 'O', ha='center', va='center', fontsize=16, color='green')
-        
-        # Draw robot
-        x, y = self.robot_position
-        robot_directions = ['^', '>', 'v', '<']
-        ax.text(y, x, robot_directions[self.robot_direction], ha='center', va='center', fontsize=16, color='red')
-
-        ax.set_xticks(range(self.grid_size))
-        ax.set_yticks(range(self.grid_size))
-        ax.grid(True)
-        plt.gca().invert_yaxis()
-        plt.pause(0.01)  # Pause to allow updates
+        self.update_display()
 
 # Interactive Loop
 if __name__ == "__main__":
-    plt.ion()  # Enable interactive mode
     world = KarelWorld(GRID_SIZE)
 
     # Place items in the world
@@ -87,7 +105,10 @@ if __name__ == "__main__":
     world.place_item(4, 4)
 
     print("Welcome to the Karel Simulator!")
-    print("Commands: move, turn_left, pick_up, display, quit")
+    print("Commands: move, turn_left, pick_up, quit")
+
+    # Initialize display
+    world.update_display()
 
     while True:
         command = input("Enter command: ").strip().lower()
@@ -97,11 +118,9 @@ if __name__ == "__main__":
             world.turn_left()
         elif command == "pick_up":
             world.pick_up()
-        elif command == "display":
-            world.display_world()
         elif command == "quit":
             print("Exiting the simulator. Goodbye!")
-            plt.ioff()  # Turn off interactive mode
+            plt.close(world.fig)
             break
         else:
-            print("Unknown command. Try: move, turn_left, pick_up, display, quit")
+            print("Unknown command. Try: move, turn_left, pick_up, quit")
