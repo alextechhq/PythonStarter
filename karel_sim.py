@@ -26,9 +26,8 @@ class KarelWorld:
         self.ax.set_yticks([])
         self.ax.set_xticklabels([])
         self.ax.set_yticklabels([])
-        
+
         plt.gca().invert_yaxis()
-        
 
         # Draw the grid
         for x in range(self.grid_size):
@@ -42,9 +41,12 @@ class KarelWorld:
         self.robot_directions = ['^', '>', 'v', '<']
         self.robot_text = None
         self.item_texts = []
+        self.items_placed = 0  # Track number of items placed
+        self.items_picked_up = 0  # Track number of items picked up
 
     def place_item(self, x, y):
         self.grid[x][y] = 1  # Place an item
+        self.items_placed += 1  # Increment placed item count
         self.item_texts.append(
             self.ax.text(
                 y, x, 'O', ha='center', va='center', fontsize=16, color='green'
@@ -85,6 +87,7 @@ class KarelWorld:
         x, y = self.robot_position
         if self.grid[x][y] == 1:
             self.grid[x][y] = 0
+            self.items_picked_up += 1  # Increment picked-up item count
             print("Picked up an item!")
             # Remove the corresponding text
             for item_text in self.item_texts:
@@ -95,6 +98,28 @@ class KarelWorld:
         else:
             print("No item to pick up here.")
         self.update_display()
+
+        # Check if all items have been picked up
+        if self.items_picked_up == self.items_placed:
+            self.success()  # Trigger success message when all items are picked up
+
+    def success(self):
+        # Display success message in the center of the grid
+        success_text = self.ax.text(
+            self.grid_size / 2 - 0.5, self.grid_size / 2 - 0.5, 'SUCCESS!', ha='center', va='center', fontsize=20, color='blue', fontweight='bold'
+        )
+
+        # Display a checkmark symbol
+        self.ax.text(
+            self.grid_size / 2 - 0.5, self.grid_size / 2 + 0.5, '✓', ha='center', va='center', fontsize=20, color='green'
+        )
+
+        # Redraw the figure and pause for 2 seconds to show the success
+        self.fig.canvas.draw_idle()
+        plt.pause(2)
+
+        # Close the plot after the pause
+        plt.close(self.fig)
 
 # Interactive Loop
 if __name__ == "__main__":
