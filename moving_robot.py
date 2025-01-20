@@ -137,7 +137,7 @@ if __name__ == "__main__":
     world.place_item(4, 4)
 
     print("Welcome to the Karel Simulator!")
-    print("Commands: move, turn_left, pick_up, quit")
+    print("Commands: move, turn_left, pick_up, go_path, quit")
 
     # Initialize display
     world.update_display()
