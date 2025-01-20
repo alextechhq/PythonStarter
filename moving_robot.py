@@ -83,6 +83,13 @@ class KarelWorld:
         self.robot_direction = (self.robot_direction - 1) % 4
         self.update_display()
 
+    def go_path(self):
+        self.turn_left()
+        self.turn_left()
+        self.move()
+        self.move()
+        #TODO: Finish it by yourself
+
     def pick_up(self):
         x, y = self.robot_position
         if self.grid[x][y] == 1:
@@ -141,6 +148,8 @@ if __name__ == "__main__":
             world.move()
         elif command == "turn_left":
             world.turn_left()
+        elif command == "go_path":
+            world.go_path()
         elif command == "pick_up":
             world.pick_up()
         elif command == "quit":
