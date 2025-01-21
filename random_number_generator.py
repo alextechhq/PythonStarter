@@ -5,8 +5,6 @@ def generate_random_number(min_value, max_value):
     return random.randint(min_value, max_value)
 
 # Example function call
-min_value = 1
-max_value = 100
-random_number = generate_random_number(min_value, max_value)
+random_number = generate_random_number(1, 100)
 
-print(f"The randomly generated number between {min_value} and {max_value} is: {random_number}")
+print(f"The randomly generated number between {1} and {100} is: {random_number}")

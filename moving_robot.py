@@ -79,16 +79,7 @@ class RobotWorld:
             self.robot_position[1] -= 1
         self.update_display()
 
-    def turn_left(self):
-        self.robot_direction = (self.robot_direction - 1) % 4
-        self.update_display()
-
-    def go_path(self):
-        self.turn_left()
-        self.turn_left()
-        self.move()
-        self.move()
-        #TODO: Finish it by yourself
+  
 
     def pick_up(self):
         x, y = self.robot_position
@@ -110,31 +101,11 @@ class RobotWorld:
         if self.items_picked_up == self.items_placed:
             self.success()  # Trigger success message when all items are picked up
 
-    def success(self):
-        # Display success message in the center of the grid
-        success_text = self.ax.text(
-            self.grid_size / 2 - 0.5, self.grid_size / 2 - 0.5, 'SUCCESS!', ha='center', va='center', fontsize=20, color='blue', fontweight='bold'
-        )
-
-        # Display a checkmark symbol
-        self.ax.text(
-            self.grid_size / 2 - 0.5, self.grid_size / 2 + 0.5, '✓', ha='center', va='center', fontsize=20, color='green'
-        )
-
-        # Redraw the figure and pause for 2 seconds to show the success
-        self.fig.canvas.draw_idle()
-        plt.pause(2)
-
-        # Close the plot after the pause
-        plt.close(self.fig)
+ 
 
 # Interactive Loop
 if __name__ == "__main__":
     world = RobotWorld(GRID_SIZE)
-
-    # Place items in the world
-    world.place_item(2, 2)
-    world.place_item(4, 4)
 
     print("Welcome to the Robot Simulator!")
     print("Commands: move, turn_left, pick_up, go_path, quit")
