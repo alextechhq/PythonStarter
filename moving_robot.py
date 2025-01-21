@@ -8,7 +8,7 @@ GRID_SIZE = 5  # 5x5 grid
 # Define robot directions
 DIRECTIONS = ["UP", "RIGHT", "DOWN", "LEFT"]
 
-class KarelWorld:
+class RobotWorld:
     def __init__(self, grid_size):
         self.grid_size = grid_size
         self.grid = np.zeros((grid_size, grid_size))
@@ -130,13 +130,13 @@ class KarelWorld:
 
 # Interactive Loop
 if __name__ == "__main__":
-    world = KarelWorld(GRID_SIZE)
+    world = RobotWorld(GRID_SIZE)
 
     # Place items in the world
     world.place_item(2, 2)
     world.place_item(4, 4)
 
-    print("Welcome to the Karel Simulator!")
+    print("Welcome to the Robot Simulator!")
     print("Commands: move, turn_left, pick_up, go_path, quit")
 
     # Initialize display

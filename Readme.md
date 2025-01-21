@@ -95,7 +95,7 @@ This script simulates a robot moving on a 5x5 grid. The robot can move, turn lef
 
 **Example output in the terminal:**
 ```
-Welcome to the Karel Simulator!
+Welcome to the Robot Simulator!
 Commands: move, turn_left, pick_up, quit
 ```
 
