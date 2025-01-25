@@ -123,11 +123,6 @@ class RobotWorld:
             self.success()  # Trigger success message when all items are picked up
 
     def success(self):
-        # Display success message in the center of the grid
-        success_text = self.ax.text(
-            self.grid_size / 2 - 0.5, self.grid_size / 2 - 0.5, 'SUCCESS!', ha='center', va='center', fontsize=20, color='blue', fontweight='bold'
-        )
-
         # Display a checkmark symbol
         self.ax.text(
             self.grid_size / 2 - 0.5, self.grid_size / 2 + 0.5, '✓', ha='center', va='center', fontsize=20, color='green'
@@ -153,6 +148,8 @@ if __name__ == "__main__":
 
     # Initialize display
     world.update_display()
+    
+    turn_right = lambda: 
 
     while True:
         command = input("Enter command: ").strip().lower()
