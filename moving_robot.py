@@ -88,7 +88,19 @@ class RobotWorld:
         self.turn_left()
         self.move()
         self.move()
-        #TODO: Finish it by yourself
+        self.turn_left()
+        self.move()
+        self.move()
+        self.pick_up()
+        self.move()
+        self.move()
+        self.turn_left()
+        self.turn_left()
+        self.turn_left()
+        self.move()
+        self.move()
+        self.pick_up()
+        # Success should be triggered after the last item is picked up        
 
     def pick_up(self):
         x, y = self.robot_position
